@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentinelWeb | Prévention Phishing & Arnaques</title>
+    <meta name="description" content="Apprenez à détecter et éviter les arnaques web, le phishing et sécurisez votre vie numérique.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#3b82f6', // Blue 500
+                        secondary: '#10b981', // Emerald 500
+                        accent: '#f43f5e', // Rose 500
+                        dark: '#0f172a', // Slate 900
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Glassmorphism utility */
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Utility for password checks */
+        .check-item {
+            transition: all 0.3s ease;
+            opacity: 0.5;
+        }
+        .check-item.valid {
+            opacity: 1;
+            color: #10b981; /* emerald-500 */
+        }
+        .check-item.valid i {
+            color: #10b981;
+        }
+        
+        /* Quiz Category Card Hover */
+        .quiz-card {
+            transition: all 0.3s ease;
+        }
+        .quiz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-dark text-slate-200 antialiased selection:bg-primary selection:text-white overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass top-0 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-shield-halved text-3xl text-primary animate-pulse-slow"></i>
+                    <span class="text-2xl font-bold tracking-tight text-white">Sentinel<span class="text-primary">Web</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#accueil" class="hover:text-primary transition-colors px-3 py-2 rounded-md text-sm font-medium">Accueil</a>
+                        <a href="#menaces" class="hover:text-primary transition-colors px-3 py-2 rounded-md text-sm font-medium">Les Menaces</a>
+                        <a href="#quiz" class="hover:text-primary transition-colors px-3 py-2 rounded-md text-sm font-medium">Centre de Formation</a>
+                        <a href="#outils" class="hover:text-primary transition-colors px-3 py-2 rounded-md text-sm font-medium">Outils</a>
+                        <a href="https://github.com" target="_blank" class="bg-primary hover:bg-blue-600 text-white px-4 py-2 rounded-full transition-all transform hover:scale-105 shadow-lg shadow-blue-500/30">
+                            <i class="fa-brands fa-github mr-2"></i>GitHub
+                        </a>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-slate-800 absolute w-full border-b border-slate-700" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#accueil" class="block hover:bg-slate-700 px-3 py-2 rounded-md text-base font-medium">Accueil</a>
+                <a href="#menaces" class="block hover:bg-slate-700 px-3 py-2 rounded-md text-base font-medium">Les Menaces</a>
+                <a href="#quiz" class="block hover:bg-slate-700 px-3 py-2 rounded-md text-base font-medium">Quiz</a>
+                <a href="#outils" class="block hover:bg-slate-700 px-3 py-2 rounded-md text-base font-medium">Outils</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="accueil" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[100px] -z-10 animate-pulse-slow"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-[100px] -z-10"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col-reverse lg:flex-row items-center">
+            <div class="lg:w-1/2 text-center lg:text-left mt-10 lg:mt-0">
+                <div class="inline-block px-4 py-1 rounded-full bg-slate-800 border border-slate-700 text-secondary text-sm font-semibold mb-6">
+                    <i class="fa-solid fa-check-circle mr-2"></i>Sécurisez votre avenir numérique
+                </div>
+                <h1 class="text-5xl lg:text-7xl font-bold text-white leading-tight mb-6">
+                    Ne mordez pas à <br> <span class="gradient-text">l'hameçon.</span>
+                </h1>
+                <p class="text-xl text-slate-400 mb-8 leading-relaxed">
+                    Le phishing et les arnaques web évoluent chaque jour. Apprenez à identifier les pièges, testez vos connaissances et protégez vos données personnelles.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="#quiz" class="px-8 py-4 bg-primary text-white font-bold rounded-lg hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center">
+                        <i class="fa-solid fa-graduation-cap mr-2"></i> Centre de Formation
+                    </a>
+                    <a href="#menaces" class="px-8 py-4 bg-slate-800 text-white font-bold rounded-lg hover:bg-slate-700 transition-all border border-slate-700 flex items-center justify-center">
+                        En savoir plus
+                    </a>
+                </div>
+            </div>
+            <div class="lg:w-1/2 flex justify-center relative">
+                <div class="relative w-full max-w-md animate-float">
+                    <!-- Illustrative Composition using FontAwesome & CSS shapes -->
+                    <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 border border-slate-700 shadow-2xl relative z-10">
+                        <div class="flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <div class="ml-auto text-xs text-slate-500">inbox • secure</div>
+                        </div>
+                        <div class="space-y-4">
+                            <!-- Fake Email UI -->
+                            <div class="bg-slate-800/50 p-3 rounded border border-slate-700">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center text-red-400">
+                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-bold text-white">Service Sécurité (Faux)</div>
+                                        <div class="text-xs text-slate-400">urgent@support-fake-bank.com</div>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-slate-300">Votre compte va être suspendu ! Cliquez ici...</div>
+                            </div>
+                            <!-- Shield Icon Overlay -->
+                            <div class="absolute -right-6 -bottom-6 bg-secondary text-white p-4 rounded-xl shadow-lg shadow-green-500/20">
+                                <i class="fa-solid fa-shield-virus text-3xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Decorative back elements -->
+                    <div class="absolute top-10 -right-10 w-24 h-24 bg-primary/20 rounded-lg -z-10 rotate-12"></div>
+                    <div class="absolute -bottom-5 -left-5 w-32 h-32 bg-accent/10 rounded-full -z-10 blur-xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Les Menaces Section -->
+    <section id="menaces" class="py-20 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Connaître l'ennemi</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Les cybercriminels utilisent diverses techniques pour vous piéger. Voici les plus courantes à surveiller.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-primary transition-colors hover:shadow-xl group">
+                    <div class="w-14 h-14 bg-blue-500/10 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors">
+                        <i class="fa-solid fa-envelope-open-text text-2xl text-blue-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Le Phishing (Hameçonnage)</h3>
+                    <p class="text-slate-400 mb-4">Des emails frauduleux qui imitent des entreprises légitimes pour voler vos identifiants ou données bancaires.</p>
+                    <ul class="text-sm text-slate-500 space-y-2">
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i>Urgence injustifiée</li>
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i>Liens suspects</li>
+                    </ul>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-secondary transition-colors hover:shadow-xl group">
+                    <div class="w-14 h-14 bg-green-500/10 rounded-lg flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition-colors">
+                        <i class="fa-solid fa-mobile-screen-button text-2xl text-green-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Le Smishing (SMS)</h3>
+                    <p class="text-slate-400 mb-4">Une variante du phishing par SMS. Souvent lié à des livraisons de colis (Colissimo, DHL) ou au CPF.</p>
+                    <ul class="text-sm text-slate-500 space-y-2">
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i>Numéros inconnus</li>
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i>Demande de frais minimes</li>
+                    </ul>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-accent transition-colors hover:shadow-xl group">
+                    <div class="w-14 h-14 bg-rose-500/10 rounded-lg flex items-center justify-center mb-6 group-hover:bg-rose-500/20 transition-colors">
+                        <i class="fa-solid fa-computer-mouse text-2xl text-rose-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Faux Sites Web</h3>
+                    <p class="text-slate-400 mb-4">Des copies presque parfaites de sites marchands ou administratifs pour intercepter vos paiements.</p>
+                    <ul class="text-sm text-slate-500 space-y-2">
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i>URL mal orthographiée</li>
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i>Prix trop bas (-80%)</li>
+                    </ul>
+                </div>
+
+                <!-- Card 4 (New: Ransomware) -->
+                <div class="bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-orange-500 transition-colors hover:shadow-xl group">
+                    <div class="w-14 h-14 bg-orange-500/10 rounded-lg flex items-center justify-center mb-6 group-hover:bg-orange-500/20 transition-colors">
+                        <i class="fa-solid fa-file-shield text-2xl text-orange-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Ransomware (Rançongiciel)</h3>
+                    <p class="text-slate-400 mb-4">Un logiciel malveillant qui crypte vos fichiers personnels et demande une rançon pour les débloquer.</p>
+                    <ul class="text-sm text-slate-500 space-y-2">
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Faites des sauvegardes</li>
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i>Ne payez jamais</li>
+                    </ul>
+                </div>
+
+                <!-- Card 5 (New: Public Wifi) -->
+                <div class="bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-yellow-500 transition-colors hover:shadow-xl group">
+                    <div class="w-14 h-14 bg-yellow-500/10 rounded-lg flex items-center justify-center mb-6 group-hover:bg-yellow-500/20 transition-colors">
+                        <i class="fa-solid fa-wifi text-2xl text-yellow-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Wi-Fi Publics</h3>
+                    <p class="text-slate-400 mb-4">Les réseaux gratuits (gares, cafés) sont souvent non sécurisés. Vos données peuvent être interceptées facilement.</p>
+                    <ul class="text-sm text-slate-500 space-y-2">
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Utilisez un VPN</li>
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i>Pas d'achats en public</li>
+                    </ul>
+                </div>
+
+                <!-- Card 6 (New: Weak Passwords) -->
+                <div class="bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-purple-500 transition-colors hover:shadow-xl group">
+                    <div class="w-14 h-14 bg-purple-500/10 rounded-lg flex items-center justify-center mb-6 group-hover:bg-purple-500/20 transition-colors">
+                        <i class="fa-solid fa-key text-2xl text-purple-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Mots de Passe Faibles</h3>
+                    <p class="text-slate-400 mb-4">Réutiliser "123456" ou le même mot de passe partout est une faille critique. Activez la double authentification.</p>
+                    <ul class="text-sm text-slate-500 space-y-2">
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Gestionnaire de mdp</li>
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Activez le 2FA</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Hub Section (New & Improved) -->
+    <section id="quiz" class="py-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-dark to-slate-900"></div>
+        <div class="max-w-5xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-10">
+                <span class="text-primary font-bold tracking-wider uppercase text-sm">Centre d'entraînement</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-white mt-2 mb-6">Testez vos Réflexes</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Choisissez une thématique pour commencer. Chaque quiz est conçu pour cibler des compétences spécifiques de cybersécurité.</p>
+            </div>
+
+            <!-- Quiz Hub Container -->
+            <div class="bg-slate-800 rounded-2xl border border-slate-700 shadow-2xl overflow-hidden p-6 md:p-10 min-h-[500px]" id="quiz-container">
+                
+                <!-- 1. Selection Screen (Menu) -->
+                <div id="quiz-menu" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Module 1 -->
+                    <button onclick="startSpecificQuiz('phishing')" class="quiz-card bg-slate-700 p-6 rounded-xl border border-slate-600 hover:border-blue-500 text-left group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i class="fa-solid fa-envelope text-6xl text-blue-500"></i>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4 text-blue-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-fish text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Phishing & Emails</h3>
+                        <p class="text-sm text-slate-400">Déjouez les pièges dans votre boîte mail. Apprenez à repérer les faux expéditeurs et liens.</p>
+                    </button>
+
+                    <!-- Module 2 -->
+                    <button onclick="startSpecificQuiz('passwords')" class="quiz-card bg-slate-700 p-6 rounded-xl border border-slate-600 hover:border-purple-500 text-left group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i class="fa-solid fa-lock text-6xl text-purple-500"></i>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4 text-purple-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-key text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Mots de Passe & Comptes</h3>
+                        <p class="text-sm text-slate-400">Hygiène numérique, gestionnaires de mots de passe et double authentification (2FA).</p>
+                    </button>
+
+                    <!-- Module 3 -->
+                    <button onclick="startSpecificQuiz('mobile')" class="quiz-card bg-slate-700 p-6 rounded-xl border border-slate-600 hover:border-green-500 text-left group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i class="fa-solid fa-mobile text-6xl text-green-500"></i>
+                        </div>
+                        <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4 text-green-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-wifi text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Mobile & Connexions</h3>
+                        <p class="text-sm text-slate-400">Dangers du Wi-Fi public, Smishing (SMS) et sécurité des applications smartphones.</p>
+                    </button>
+
+                    <!-- Module 4 -->
+                    <button onclick="startSpecificQuiz('expert')" class="quiz-card bg-slate-700 p-6 rounded-xl border border-slate-600 hover:border-accent text-left group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i class="fa-solid fa-user-secret text-6xl text-accent"></i>
+                        </div>
+                        <div class="w-12 h-12 bg-rose-500/20 rounded-lg flex items-center justify-center mb-4 text-rose-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-dragon text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Challenge Expert</h3>
+                        <p class="text-sm text-slate-400">Un mélange aléatoire de toutes les catégories. Pour ceux qui pensent tout savoir !</p>
+                    </button>
+                </div>
+
+                <!-- 2. Question Screen (Hidden by default) -->
+                <div id="quiz-question" class="hidden h-full flex flex-col">
+                    <div class="flex justify-between items-center mb-8">
+                        <button onclick="returnToMenu()" class="text-slate-400 hover:text-white text-sm">
+                            <i class="fa-solid fa-arrow-left mr-1"></i> Menu
+                        </button>
+                        <div class="text-sm text-slate-500">Question <span id="current-q">1</span>/<span id="total-q">5</span></div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full h-2 bg-slate-700 rounded-full mb-8">
+                        <div id="progress-bar" class="h-2 bg-primary rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    
+                    <h3 id="question-text" class="text-xl md:text-2xl font-bold text-white mb-8 flex-grow">Loading...</h3>
+                    
+                    <div id="answers-container" class="space-y-4 mb-6">
+                        <!-- Buttons generated by JS -->
+                    </div>
+                    
+                    <!-- Feedback Area -->
+                    <div id="feedback" class="hidden mt-auto p-4 rounded-lg border bg-slate-800 animate-fade-in">
+                        <div class="flex items-start gap-3">
+                            <div id="feedback-icon-container" class="mt-1">
+                                <i id="feedback-icon" class="fa-solid"></i>
+                            </div>
+                            <div>
+                                <h4 id="feedback-title" class="font-bold"></h4>
+                                <p id="feedback-text" class="text-sm text-slate-300 mt-1"></p>
+                            </div>
+                        </div>
+                        <button onclick="nextQuestion()" class="mt-4 bg-white text-slate-900 hover:bg-slate-200 py-2 px-6 rounded-lg text-sm font-bold transition-colors w-full sm:w-auto">
+                            Question Suivante <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. Result Screen (Hidden) -->
+                <div id="quiz-result" class="hidden text-center py-10">
+                    <div id="score-icon" class="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-500 transform scale-100">
+                        <!-- Icon injected by JS -->
+                    </div>
+                    <h3 class="text-3xl font-bold text-white mb-2">Quiz Terminé !</h3>
+                    <p class="text-xl text-slate-300 mb-6">Votre score : <span id="final-score" class="font-bold text-primary">0</span> / <span id="final-total">0</span></p>
+                    <p id="result-message" class="text-slate-400 mb-8 max-w-md mx-auto"></p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="returnToMenu()" class="border border-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full transition-all">
+                            <i class="fa-solid fa-list mr-2"></i> Choisir un autre quiz
+                        </button>
+                        <button onclick="restartCurrentQuiz()" class="bg-primary hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full transition-all shadow-lg shadow-blue-500/30">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Réessayer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Outils Section (Password Checker) -->
+    <section id="outils" class="py-20 bg-dark border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-12 items-center">
+            
+            <div class="md:w-1/2">
+                <h2 class="text-3xl font-bold text-white mb-6">Testeur de Robustesse <br><span class="text-secondary">Mot de Passe</span></h2>
+                <p class="text-slate-400 mb-6">
+                    Un mot de passe faible est la porte d'entrée numéro 1 pour les hackers. Testez la complexité du vôtre ici. Les critères ci-dessous s'allumeront en vert lorsque vous tapez.
+                </p>
+                <div class="space-y-4" id="password-requirements">
+                    <div class="flex items-center text-slate-400 check-item" id="req-length">
+                        <i class="fa-solid fa-check mr-3"></i> Au moins 12 caractères
+                    </div>
+                    <div class="flex items-center text-slate-400 check-item" id="req-mixed">
+                        <i class="fa-solid fa-check mr-3"></i> Mélange majuscules/minuscules
+                    </div>
+                    <div class="flex items-center text-slate-400 check-item" id="req-number">
+                        <i class="fa-solid fa-check mr-3"></i> Contient un chiffre
+                    </div>
+                    <div class="flex items-center text-slate-400 check-item" id="req-special">
+                        <i class="fa-solid fa-check mr-3"></i> Caractères spéciaux (!@#$%)
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:w-1/2 w-full">
+                <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 shadow-xl">
+                    <label class="block text-sm font-medium text-slate-400 mb-2">Entrez un mot de passe</label>
+                    <div class="relative mb-4">
+                        <input type="password" id="password-input" 
+                            class="w-full bg-slate-900 border border-slate-600 text-white rounded-lg pl-4 pr-12 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                            placeholder="Tapez ici..." oninput="checkPasswordStrength()">
+                        <button onclick="togglePasswordVisibility()" class="absolute right-4 top-3.5 text-slate-500 hover:text-white">
+                            <i class="fa-regular fa-eye" id="eye-icon"></i>
+                        </button>
+                    </div>
+
+                    <!-- Strength Meter -->
+                    <div class="h-2 w-full bg-slate-700 rounded-full mb-2 overflow-hidden">
+                        <div id="strength-bar" class="h-full bg-red-500 w-0 transition-all duration-500"></div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span id="strength-text" class="text-sm font-semibold text-slate-500">En attente de saisie...</span>
+                        <span class="text-xs text-slate-600">Calcul local sécurisé</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex items-center justify-center gap-2 mb-6">
+                <i class="fa-solid fa-shield-halved text-2xl text-slate-600"></i>
+                <span class="text-xl font-bold text-slate-400">SentinelWeb</span>
+            </div>
+            <p class="text-slate-500 text-sm mb-6 max-w-lg mx-auto">
+                Ce site a été créé dans un but éducatif pour sensibiliser aux dangers du web. Ne partagez jamais vos mots de passe réels sur des sites de test en ligne non vérifiés.
+            </p>
+            <div class="flex justify-center gap-6 text-slate-400 mb-8">
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+            <p class="text-slate-700 text-xs">© 2024 SentinelWeb. Open Source. Hébergé sur GitHub.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Mobile Menu Toggle ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- EXTENSIVE QUIZ DATABASE ---
+        const questionBank = {
+            phishing: [
+                {
+                    question: "Vous recevez un email de 'PayPla' disant que votre compte est bloqué. Que faites-vous ?",
+                    answers: [
+                        { text: "Je clique sur le lien pour débloquer mon compte.", correct: false },
+                        { text: "Je réponds à l'email pour demander des explications.", correct: false },
+                        { text: "Je supprime l'email et je vais sur le site officiel via mon navigateur.", correct: true },
+                        { text: "Je transfère l'email à tous mes contacts.", correct: false }
+                    ],
+                    explanation: "Ne cliquez jamais sur les liens dans les emails alarmistes. Tapez toujours l'adresse officielle manuellement."
+                },
+                {
+                    question: "Dans un email, quelle adresse d'expéditeur est suspecte pour une communication officielle d'Amazon ?",
+                    answers: [
+                        { text: "commande@amazon.fr", correct: false },
+                        { text: "support@amazon-security-alert.com", correct: true },
+                        { text: "notification@amazon.com", correct: false },
+                        { text: "noreply@amazon.fr", correct: false }
+                    ],
+                    explanation: "Les grandes entreprises n'utilisent pas de domaines à rallonge comme 'amazon-security-alert'. Elles utilisent 'amazon.com' ou 'amazon.fr'."
+                },
+                {
+                    question: "Une pièce jointe nommée 'Facture_Urgente.exe' est dans un mail d'un inconnu.",
+                    answers: [
+                        { text: "Je l'ouvre, c'est peut-être important.", correct: false },
+                        { text: "Je l'analyse avec mon antivirus puis je l'ouvre.", correct: false },
+                        { text: "Je ne l'ouvre jamais. Un fichier .exe est un programme.", correct: true },
+                        { text: "Je demande à l'expéditeur de me la renvoyer en PDF.", correct: false }
+                    ],
+                    explanation: "Une facture ne doit jamais être un fichier exécutable (.exe). C'est presque certainement un virus."
+                },
+                {
+                    question: "Que signifie le 's' dans 'https://' ?",
+                    answers: [
+                        { text: "Secure (Sécurisé)", correct: true },
+                        { text: "Site", correct: false },
+                        { text: "Simple", correct: false },
+                        { text: "Standard", correct: false }
+                    ],
+                    explanation: "Le 'S' signifie que la communication est chiffrée. Attention : les pirates peuvent aussi utiliser le HTTPS !"
+                },
+                {
+                    question: "Un email vous promet un iPhone 15 gratuit si vous payez 2€ de frais de port.",
+                    answers: [
+                        { text: "Je paie, 2€ ce n'est rien.", correct: false },
+                        { text: "C'est une arnaque classique pour voler mes données bancaires.", correct: true },
+                        { text: "Je vérifie les avis sur Google.", correct: false },
+                        { text: "Je donne une fausse adresse pour voir.", correct: false }
+                    ],
+                    explanation: "Si c'est trop beau pour être vrai, c'est une arnaque. Ils veulent juste votre numéro de carte."
+                }
+            ],
+            passwords: [
+                {
+                    question: "Quel est le meilleur mot de passe parmi ces choix ?",
+                    answers: [
+                        { text: "Azerty123", correct: false },
+                        { text: "MamanJeT'aime", correct: false },
+                        { text: "Tr@cteur-VioLeT-92!", correct: true },
+                        { text: "Password1234", correct: false }
+                    ],
+                    explanation: "Une phrase longue avec des caractères variés est beaucoup plus difficile à pirater qu'un mot court, même complexe."
+                },
+                {
+                    question: "Est-il sûr d'utiliser le même mot de passe pour Facebook, Gmail et sa Banque ?",
+                    answers: [
+                        { text: "Oui, c'est plus facile à retenir.", correct: false },
+                        { text: "Non, si un site est piraté, tous vos comptes sont compromis.", correct: true },
+                        { text: "Oui, si le mot de passe est très fort.", correct: false },
+                        { text: "Seulement si je le change souvent.", correct: false }
+                    ],
+                    explanation: "La règle d'or : Un compte = Un mot de passe unique. Utilisez un gestionnaire de mots de passe pour vous aider."
+                },
+                {
+                    question: "Qu'est-ce que le 2FA (Double Authentification) ?",
+                    answers: [
+                        { text: "Avoir deux comptes email.", correct: false },
+                        { text: "Une seconde validation (SMS, App) après le mot de passe.", correct: true },
+                        { text: "Changer de mot de passe deux fois par an.", correct: false },
+                        { text: "Avoir deux antivirus.", correct: false }
+                    ],
+                    explanation: "Le 2FA protège votre compte même si on vole votre mot de passe, car le pirate n'a pas votre téléphone."
+                },
+                {
+                    question: "Où est-il sécurisé de noter ses mots de passe ?",
+                    answers: [
+                        { text: "Sur un Post-it sous le clavier.", correct: false },
+                        { text: "Dans un fichier 'mots_de_passe.txt' sur le bureau.", correct: false },
+                        { text: "Dans un gestionnaire de mots de passe chiffré (ex: Bitwarden).", correct: true },
+                        { text: "Dans mes brouillons d'emails.", correct: false }
+                    ],
+                    explanation: "Les post-its et fichiers textes sont lisibles par n'importe qui (humain ou virus). Utilisez un coffre-fort numérique."
+                },
+                {
+                    question: "Un site vous demande votre mot de passe email pour 'vérifier votre identité'.",
+                    answers: [
+                        { text: "Je le donne.", correct: false },
+                        { text: "Je ne le donne jamais à un tiers.", correct: true },
+                        { text: "Je le donne puis je le change après.", correct: false },
+                        { text: "Je donne mon ancien mot de passe.", correct: false }
+                    ],
+                    explanation: "Aucun site légitime ne vous demandera le mot de passe d'un AUTRE service (comme votre email)."
+                }
+            ],
+            mobile: [
+                {
+                    question: "Vous recevez un SMS : 'Colis en attente, frais de 1,99€. Lien : http://livraison-express.info'",
+                    answers: [
+                        { text: "Je paie pour avoir mon colis.", correct: false },
+                        { text: "C'est du Smishing. Je ne clique pas.", correct: true },
+                        { text: "Je réponds STOP au SMS.", correct: false },
+                        { text: "J'appelle le numéro.", correct: false }
+                    ],
+                    explanation: "C'est l'arnaque la plus courante. Les livreurs n'envoient pas de liens vers des sites inconnus pour des paiements."
+                },
+                {
+                    question: "Vous connectez votre téléphone au Wi-Fi public 'Gare_Gratuit'.",
+                    answers: [
+                        { text: "Je consulte mes comptes bancaires.", correct: false },
+                        { text: "J'utilise un VPN si je dois faire quelque chose d'important.", correct: true },
+                        { text: "C'est sûr, c'est la gare.", correct: false },
+                        { text: "Je désactive mon antivirus.", correct: false }
+                    ],
+                    explanation: "Les Wi-Fi publics sont des passoires. N'importe qui peut intercepter vos données si vous n'utilisez pas de VPN."
+                },
+                {
+                    question: "Une application 'Lampe Torche' demande l'accès à vos contacts et votre position.",
+                    answers: [
+                        { text: "J'accepte, j'ai besoin de la lampe.", correct: false },
+                        { text: "Je refuse. Pourquoi une lampe a besoin de ça ?", correct: true },
+                        { text: "J'accepte seulement la position.", correct: false },
+                        { text: "Je ne sais pas.", correct: false }
+                    ],
+                    explanation: "Surveillez les permissions. Une appli simple qui demande trop d'accès revend probablement vos données."
+                },
+                {
+                    question: "Qrcode dans la rue pour gagner un cadeau. Je scanne ?",
+                    answers: [
+                        { text: "Oui, j'adore les cadeaux.", correct: false },
+                        { text: "Non, un QR code peut mener vers un site malveillant.", correct: true },
+                        { text: "Seulement si le logo a l'air officiel.", correct: false },
+                        { text: "Oui mais je ne télécharge rien.", correct: false }
+                    ],
+                    explanation: "Le 'Quishing' (QR Phishing) est réel. Un QR code peut lancer des téléchargements ou mener vers des sites piégés."
+                }
+            ]
+        };
+
+        // Initialize quiz variables
+        let currentQuizQueue = [];
+        let currentQuestionIdx = 0;
+        let userScore = 0;
+        let currentCategory = '';
+
+        // --- Quiz Selection Logic ---
+        function startSpecificQuiz(category) {
+            currentCategory = category;
+            currentQuizQueue = [];
+            
+            if (category === 'expert') {
+                // Combine all questions
+                const allQuestions = [...questionBank.phishing, ...questionBank.passwords, ...questionBank.mobile];
+                // Shuffle and take 10
+                currentQuizQueue = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 10);
+            } else {
+                // Clone the array to avoid modifying the original bank order
+                currentQuizQueue = [...questionBank[category]];
+            }
+
+            // Init UI
+            userScore = 0;
+            currentQuestionIdx = 0;
+            document.getElementById('total-q').innerText = currentQuizQueue.length;
+            
+            // Switch Screens
+            document.getElementById('quiz-menu').classList.add('hidden');
+            document.getElementById('quiz-question').classList.remove('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+            
+            loadQuestion();
+        }
+
+        function returnToMenu() {
+            document.getElementById('quiz-question').classList.add('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-menu').classList.remove('hidden');
+        }
+
+        function restartCurrentQuiz() {
+            startSpecificQuiz(currentCategory);
+        }
+
+        // --- Question Loading Logic ---
+        function loadQuestion() {
+            const questionData = currentQuizQueue[currentQuestionIdx];
+            
+            // Update Text
+            document.getElementById('question-text').innerText = questionData.question;
+            document.getElementById('current-q').innerText = currentQuestionIdx + 1;
+            
+            // Update Progress
+            const progress = ((currentQuestionIdx) / currentQuizQueue.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+
+            // Clear previous answers
+            const container = document.getElementById('answers-container');
+            container.innerHTML = '';
+            
+            // Hide feedback
+            document.getElementById('feedback').classList.add('hidden');
+
+            // Generate buttons
+            questionData.answers.forEach(answer => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl bg-slate-700 hover:bg-slate-600 transition-all border border-transparent text-slate-200 font-medium mb-2 flex justify-between items-center group";
+                
+                const spanText = document.createElement('span');
+                spanText.innerText = answer.text;
+                
+                const spanIcon = document.createElement('i');
+                spanIcon.className = "fa-regular fa-circle text-slate-400 group-hover:text-white transition-colors";
+                
+                btn.appendChild(spanText);
+                btn.appendChild(spanIcon);
+                
+                btn.onclick = () => handleAnswer(btn, answer.correct, questionData.explanation, spanIcon);
+                container.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(selectedBtn, isCorrect, explanation, icon) {
+            // Disable all buttons
+            const buttons = document.getElementById('answers-container').children;
+            for (let btn of buttons) {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            selectedBtn.classList.remove('opacity-50'); // Keep selected opaque
+
+            // Show feedback
+            const feedback = document.getElementById('feedback');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+            const feedbackIcon = document.getElementById('feedback-icon');
+
+            feedback.classList.remove('hidden');
+            feedbackText.innerText = explanation;
+
+            if (isCorrect) {
+                userScore++;
+                selectedBtn.classList.replace('bg-slate-700', 'bg-emerald-500/20');
+                selectedBtn.classList.replace('border-transparent', 'border-emerald-500');
+                selectedBtn.classList.add('text-emerald-300');
+                icon.className = "fa-solid fa-check-circle text-emerald-500";
+                
+                feedbackTitle.innerText = "Bonne réponse !";
+                feedbackTitle.className = "font-bold text-emerald-400";
+                feedbackIcon.className = "fa-solid fa-circle-check text-emerald-400 text-2xl";
+                feedback.className = "mt-auto p-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 animate-fade-in";
+            } else {
+                selectedBtn.classList.replace('bg-slate-700', 'bg-rose-500/20');
+                selectedBtn.classList.replace('border-transparent', 'border-rose-500');
+                selectedBtn.classList.add('text-rose-300');
+                icon.className = "fa-solid fa-circle-xmark text-rose-500";
+                
+                feedbackTitle.innerText = "Incorrect";
+                feedbackTitle.className = "font-bold text-rose-400";
+                feedbackIcon.className = "fa-solid fa-circle-xmark text-rose-400 text-2xl";
+                feedback.className = "mt-auto p-4 rounded-lg border border-rose-500/30 bg-rose-500/10 animate-fade-in";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIdx++;
+            if (currentQuestionIdx < currentQuizQueue.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-question').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            
+            document.getElementById('final-score').innerText = userScore;
+            document.getElementById('final-total').innerText = currentQuizQueue.length;
+            
+            const resultMsg = document.getElementById('result-message');
+            const scoreIcon = document.getElementById('score-icon');
+            const percentage = (userScore / currentQuizQueue.length) * 100;
+            
+            if (percentage === 100) {
+                resultMsg.innerText = "Incroyable ! Vous êtes un véritable pare-feu humain. Rien ne vous échappe.";
+                scoreIcon.innerHTML = '<i class="fa-solid fa-trophy text-5xl text-yellow-400"></i>';
+                scoreIcon.className = "w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 bg-yellow-500/20 shadow-lg shadow-yellow-500/20 animate-bounce";
+            } else if (percentage >= 70) {
+                resultMsg.innerText = "Beau travail ! Vous avez de solides réflexes, continuez comme ça.";
+                scoreIcon.innerHTML = '<i class="fa-solid fa-medal text-5xl text-blue-400"></i>';
+                scoreIcon.className = "w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 bg-blue-500/20 shadow-lg shadow-blue-500/20";
+            } else {
+                resultMsg.innerText = "La sécurité est un apprentissage continu. Relisez les explications et réessayez !";
+                scoreIcon.innerHTML = '<i class="fa-solid fa-shield-cat text-5xl text-rose-400"></i>';
+                scoreIcon.className = "w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 bg-rose-500/20 shadow-lg shadow-rose-500/20";
+            }
+        }
+
+        // --- Password Strength Logic ---
+        function togglePasswordVisibility() {
+            const input = document.getElementById('password-input');
+            const icon = document.getElementById('eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        function checkPasswordStrength() {
+            const password = document.getElementById('password-input').value;
+            const bar = document.getElementById('strength-bar');
+            const text = document.getElementById('strength-text');
+            
+            const hasLength = password.length >= 12;
+            const hasMixed = /[a-z]/.test(password) && /[A-Z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[^A-Za-z0-9]/.test(password);
+
+            updateCheckItem('req-length', hasLength);
+            updateCheckItem('req-mixed', hasMixed);
+            updateCheckItem('req-number', hasNumber);
+            updateCheckItem('req-special', hasSpecial);
+
+            let strength = 0;
+            if (password.length > 5) strength += 1;
+            if (password.length > 10) strength += 1;
+            if (hasLength) strength += 1;
+            if (hasMixed) strength += 1;
+            if (hasNumber) strength += 1;
+            if (hasSpecial) strength += 1;
+
+            let color = 'bg-red-500';
+            let label = 'Très faible';
+            let width = '5%';
+
+            if (password.length === 0) {
+                width = '0%';
+                label = 'En attente...';
+            } else if (strength < 3) {
+                width = '25%';
+                color = 'bg-red-500';
+                label = 'Faible';
+            } else if (strength < 5) {
+                width = '60%';
+                color = 'bg-yellow-500';
+                label = 'Moyen';
+            } else if (strength < 6) {
+                width = '85%';
+                color = 'bg-green-500';
+                label = 'Fort';
+            } else {
+                width = '100%';
+                color = 'bg-emerald-500';
+                label = 'Très sécurisé';
+            }
+
+            bar.style.width = width;
+            bar.className = `h-full transition-all duration-500 ${color}`;
+            text.innerText = label;
+            text.className = `text-sm font-bold ${color.replace('bg-', 'text-')}`;
+        }
+
+        function updateCheckItem(id, isValid) {
+            const el = document.getElementById(id);
+            if (isValid) {
+                el.classList.add('valid');
+                el.classList.remove('text-slate-400');
+            } else {
+                el.classList.remove('valid');
+                el.classList.add('text-slate-400');
+            }
+        }
+    </script>
+</body>
+</html>
